@@ -1,4 +1,4 @@
-name: Build VOID CLIENT
+name: Build SWIFT VISUALS
 
 on:
   workflow_dispatch:
@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -18,14 +19,27 @@ jobs:
           distribution: temurin
           java-version: '25'
 
-      - name: Build
-        working-directory: "VOID CLIENT"
+      - name: Extract project
         run: |
-          chmod +x gradlew
-          ./gradlew build
+          mkdir extracted
+          unzip -q "Swift visuals.zip" -d extracted
 
-      - name: Upload JAR
+      - name: Build SWIFT VISUALS
+        run: |
+          GRADLEW=$(find extracted -type f -name gradlew | head -n 1)
+          if [ -z "$GRADLEW" ]; then
+            echo "gradlew not found in ZIP"
+            exit 1
+          fi
+          PROJECT_DIR=$(dirname "$GRADLEW")
+          chmod +x "$GRADLEW"
+          cd "$PROJECT_DIR"
+          ./gradlew build
+          mkdir -p "$GITHUB_WORKSPACE/artifacts"
+          cp build/libs/*.jar "$GITHUB_WORKSPACE/artifacts/"
+
+      - name: Upload SWIFT VISUALS
         uses: actions/upload-artifact@v4
         with:
-          name: VOID-CLIENT
-          path: "VOID CLIENT/build/libs/*.jar"
+          name: SWIFT-VISUALS
+          path: artifacts/*.jar
