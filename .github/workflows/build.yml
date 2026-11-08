@@ -9,18 +9,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Download source
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Java 25
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '25'
 
-      - name: Build Minecraft mod
+      - name: Build
+        working-directory: "VOID CLIENT"
         run: |
           chmod +x gradlew
           ./gradlew build
@@ -29,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: VOID-CLIENT
-          path: build/libs/*.jar
+          path: "VOID CLIENT/build/libs/*.jar"
