@@ -22,7 +22,7 @@ jobs:
       - name: Extract project
         run: |
           mkdir extracted
-          unzip -q "Swift visuals.zip" -d extracted
+          unzip -q "swift visuals.zip" -d extracted
 
       - name: Build SWIFT VISUALS
         run: |
